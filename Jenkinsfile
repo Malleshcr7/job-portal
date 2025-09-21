@@ -2,10 +2,7 @@ pipeline {
     agent any
 
     tools {
-        // Ensure you have JDK installed/configured in Jenkins under "Global Tool Configuration"
-        jdk 'jdk17'  // or whatever name you gave your JDK in Jenkins
-        // Optional: If using Maven wrapper, you may skip maven tool declaration
-        // maven 'maven-3.9.6'
+        jdk 'jdk17'  // Matches your Java 17 setup, ensure this is configured in Jenkins
     }
 
     stages {
@@ -16,14 +13,14 @@ pipeline {
         }
 
         stage('Build') {
-    steps {
-        bat '.\\mvnw.cmd clean package'  // ← Use 'bat' and backslashes on Windows!
-    }
-}
+            steps {
+                bat '.\\mvnw.cmd clean package'  // Windows: Use bat and mvnw.cmd
+            }
+        }
 
         stage('Test') {
             steps {
-                sh './mvnw test'
+                bat '.\\mvnw.cmd test'  // Changed from sh to bat
             }
             post {
                 always {
