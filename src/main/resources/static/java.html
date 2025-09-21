@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Interview Questions & Answers</title>
+    <style>
+        /* --- General Setup & Typography --- */
+        :root {
+            --bg-color-main: #121212;
+            --bg-color-content: #1e1e1e;
+            --bg-color-sticky-num-container: transparent; /* Number container is now a see-through layer */
+            --text-color-primary: #e0e0e0;
+            --text-color-secondary: #b0b0b0;
+            --accent-color: #007acc;
+            --code-bg-color: #2d2d2d;
+            --code-text-color: #d4d4d4;
+            --code-keyword-color: #569cd6;
+            --code-string-color: #ce9178;
+            --code-comment-color: #6a9955;
+            --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            --font-code: 'SFMono-Regular', Consolas, 'Courier New', monospace;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            background-color: var(--bg-color-main);
+            color: var(--text-color-primary);
+            font-family: var(--font-main);
+            overscroll-behavior: none;
+        }
+
+        /* --- Intro Screen --- */
+        .intro-screen {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            background-image: linear-gradient(135deg, #0d1b2a, #1b263b);
+        }
+
+        .intro-screen h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            margin-bottom: 0.5rem;
+            font-weight: 300;
+            color: #ffffff;
+        }
+
+        .intro-screen p {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            font-weight: 200;
+            color: var(--text-color-secondary);
+            max-width: 60ch;
+        }
+
+        .intro-screen .scroll-down {
+            margin-top: 3rem;
+            font-size: 0.9rem;
+            color: var(--text-color-secondary);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-20px);
+            }
+            60% {
+                transform: translateY(-10px);
+            }
+        }
+
+
+        /* --- Core Scrolling Animation Structure --- */
+        .question-container {
+            position: relative;
+            /* Give enough height for the scroll animation to complete */
+            height: 200vh;
+        }
+
+        /* Both number and content are sticky to layer them on top of each other */
+        .question-number, .question-content {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 8vw;
+            box-sizing: border-box;
+        }
+
+        /* The number layer is on top, but its container is transparent */
+        .question-number {
+            background-color: var(--bg-color-sticky-num-container);
+            z-index: 10;
+        }
+
+        .question-number h2 {
+            font-size: clamp(150px, 40vw, 500px);
+            font-weight: 900;
+            color: var(--accent-color);
+            margin: 0;
+            opacity: 0.8;
+            line-height: 1;
+            /* JS will control the opacity based on scroll */
+            transition: opacity 0.3s ease-out; /* Smooth transitions */
+        }
+
+        /* The content layer is underneath, but has a solid background */
+        .question-content {
+            background-color: var(--bg-color-content);
+            z-index: 5;
+            align-items: center;
+            /* Initially invisible, JS will reveal it */
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+        }
+
+        /* --- Content Styling --- */
+        .content-wrapper {
+            max-width: 800px;
+        }
+
+        .content-wrapper h3 {
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            color: var(--accent-color);
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+
+        .content-wrapper p, .content-wrapper li {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--text-color-secondary);
+        }
+
+        .content-wrapper strong {
+            color: var(--text-color-primary);
+            font-weight: 600;
+        }
+
+        /* --- Code Block & Table Styling (Same as before) --- */
+        pre { background-color: var(--code-bg-color); border-radius: 8px; padding: 1.5rem; font-family: var(--font-code); font-size: 0.95rem; line-height: 1.6; overflow-x: auto; white-space: pre-wrap; border: 1px solid #333; }
+        code { color: var(--code-text-color); }
+        .code-keyword { color: var(--code-keyword-color); }
+        .code-type { color: #4ec9b0; }
+        .code-string { color: var(--code-string-color); }
+        .code-comment { color: var(--code-comment-color); }
+        .code-annotation { color: #d7ba7d; }
+        .code-number { color: #b5cea8; }
+        table { width: 100%; border-collapse: collapse; margin: 2rem 0; color: var(--text-color-secondary); }
+        th, td { border: 1px solid #444; padding: 12px 15px; text-align: left; }
+        th { background-color: #2a2d2e; color: var(--text-color-primary); font-weight: bold; }
+        tr:nth-child(even) { background-color: #252526; }
+
+    </style>
+</head>
+<body>
+
+<header class="intro-screen">
+    <h1>Java Interview Questions</h1>
+    <p>A comprehensive preparation guide featuring 50 frequently asked questions, from core fundamentals to advanced concepts.</p>
+    <div class="scroll-down">Scroll Down &darr;</div>
+</header>
+
+<main id="qa-container">
+    <!-- Questions will be dynamically injected here by script -->
+</main>
+
+<script>
+    const questionsAndAnswers = [
+        // Part 1: Core Java Fundamentals
+        { q: "What is Java?", a: "Java is a high-level, object-oriented, class-based, and platform-independent programming language developed by Sun Microsystems (now Oracle). The “write once, run anywhere” (WORA) principle means compiled Java bytecode can run on all platforms that support Java without recompilation." },
+        { q: "What is the difference between JDK, JRE, and JVM?", a: "<strong>JVM (Java Virtual Machine):</strong> Abstract machine that executes Java bytecode and converts it to machine-specific code; platform-dependent.<br><br><strong>JRE (Java Runtime Environment):</strong> Runtime environment containing the JVM and standard libraries; does not include development tools.<br><br><strong>JDK (Java Development Kit):</strong> Full development kit including JRE, compiler (javac), debugger, and other tools." },
+        { q: "Explain public static void main(String[] args).", a: "This is the entry point for a Java application.<ul><li><strong>public:</strong> Accessible from anywhere.</li><li><strong>static:</strong> Belongs to the class, callable without creating an instance.</li><li><strong>void:</strong> Returns no value.</li><li><strong>main:</strong> Standard method name recognized by the JVM.</li><li><strong>String[] args:</strong> An array of strings that stores command-line arguments.</li></ul>" },
+        { q: "What are the primitive data types in Java?", a: "Java has eight primitive data types:<ul><li><strong>byte</strong> (8-bit)</li><li><strong>short</strong> (16-bit)</li><li><strong>int</strong> (32-bit)</li><li><strong>long</strong> (64-bit)</li><li><strong>float</strong> (32-bit)</li><li><strong>double</strong> (64-bit)</li><li><strong>char</strong> (16-bit Unicode)</li><li><strong>boolean</strong> (true/false)</li></ul>" },
+        { q: "What is the difference between == and .equals()?", a: "<strong>==</strong>: Compares references for objects (i.e., checks if they point to the same memory location). For primitive types, it compares their values.<br><br><strong>equals():</strong> Compares the content/state of two objects. This method is often overridden in classes like <code>String</code> and <code>Integer</code> to provide a meaningful content comparison.", code: `<span class="code-type">String</span> s1 = <span class="code-keyword">new</span> <span class="code-type">String</span>(<span class="code-string">"HELLO"</span>);\n<span class="code-type">String</span> s2 = <span class="code-keyword">new</span> <span class="code-type">String</span>(<span class="code-string">"HELLO"</span>);\n\nSystem.out.println(s1 == s2);         <span class="code-comment">// false (different objects in memory)</span>\nSystem.out.println(s1.equals(s2)); <span class="code-comment">// true (same content)</span>` },
+        { q: "What are Wrapper Classes?", a: "Wrapper classes are object representations for Java's primitive data types. They are part of the <code>java.lang</code> package and allow primitives to be used in contexts where objects are required, such as in collections (e.g., <code>ArrayList&lt;Integer&gt;</code>) and generics.<br>Examples: <code>Integer</code> for <code>int</code>, <code>Character</code> for <code>char</code>, <code>Double</code> for <code>double</code>." },
+        { q: "What is Autoboxing and Unboxing?", a: "This is the automatic conversion that the Java compiler makes between primitive types and their corresponding wrapper classes.<br><br><strong>Autoboxing:</strong> Automatic conversion of a primitive to its wrapper class. (<code>primitive → wrapper</code>)<br><strong>Unboxing:</strong> Automatic conversion of a wrapper class back to its primitive type. (<code>wrapper → primitive</code>)", code: `<span class="code-comment">// Autoboxing: int to Integer</span>\n<span class="code-type">Integer</span> i = <span class="code-number">100</span>;\n\n<span class="code-comment">// Unboxing: Integer to int</span>\n<span class="code-type">int</span> j = i;` },
+        { q: "What is a constructor?", a: "A constructor is a special method used to initialize an object when it is created. It is called at the time of instance creation. Key characteristics:<ul><li>It has the same name as the class.</li><li>It does not have an explicit return type, not even <code>void</code>.</li><li>If you don't define a constructor, the Java compiler provides a default no-argument constructor.</li></ul>" },
+        { q: "What is the `this` keyword?", a: "The <code>this</code> keyword is a reference to the current object—the object whose method or constructor is being called. It can be used to:<ul><li>Refer to instance variables, especially to disambiguate from parameters with the same name.</li><li>Invoke a constructor from another constructor within the same class (constructor chaining).</li><li>Be passed as an argument in a method call to pass the current instance.</li></ul>", code: `<span class="code-keyword">class</span> <span class="code-type">Student</span> {\n    <span class="code-type">String</span> name;\n\n    Student(<span class="code-type">String</span> name) {\n        <span class="code-comment">// 'this.name' is the instance field</span>\n        <span class="code-comment">// 'name' is the parameter</span>\n        <span class="code-keyword">this</span>.name = name;\n    }\n}` },
+        { q: "What is the `super` keyword?", a: "The <code>super</code> keyword is a reference to the immediate parent class object. It is used to:<ul><li>Call a superclass's constructor from a subclass's constructor (must be the first statement).</li><li>Access members (methods or variables) of the superclass that have been overridden in the subclass.</li></ul>", code: `<span class="code-keyword">class</span> <span class="code-type">Animal</span> {\n    <span class="code-keyword">void</span> eat() { System.out.println(<span class="code-string">"eating..."</span>); }\n}\n\n<span class="code-keyword">class</span> <span class="code-type">Dog</span> <span class="code-keyword">extends</span> <span class="code-type">Animal</span> {\n    <span class="code-keyword">void</span> eat() {\n        <span class="code-keyword">super</span>.eat(); <span class="code-comment">// Calls Animal's eat() method</span>\n        System.out.println(<span class="code-string">"eating bread..."</span>);\n    }\n}` },
+        { q: "What are the four main principles of OOP?", a: "<ul><li><strong>Encapsulation:</strong> Bundling data (attributes) and methods that operate on the data into a single unit (a class), and restricting direct access to some of an object's components.</li><li><strong>Abstraction:</strong> Hiding complex implementation details and exposing only the necessary functionalities to the user.</li><li><strong>Inheritance:</strong> The mechanism by which one class (subclass) acquires the properties and behaviors of another class (superclass), promoting code reuse.</li><li><strong>Polymorphism:</strong> The ability of an object to take on many forms. It allows a single action to be performed in different ways, typically through method overloading and method overriding.</li></ul>" },
+        { q: "What is Method Overloading?", a: "Method overloading is a form of compile-time polymorphism. It occurs when two or more methods within the same class have the same name but different parameter lists (different number of parameters, different types of parameters, or both). The return type does not play a role in overloading.", code: `<span class="code-keyword">class</span> <span class="code-type">Display</span> {\n    <span class="code-keyword">public void</span> show(<span class="code-type">char</span> c) {\n        System.out.println(c);\n    }\n    <span class="code-keyword">public void</span> show(<span class="code-type">char</span> c, <span class="code-type">int</span> num) {\n        System.out.println(c + <span class="code-string">" "</span> + num);\n    }\n}` },
+        { q: "What is Method Overriding?", a: "Method overriding is a form of run-time polymorphism. It occurs when a subclass provides a specific implementation for a method that is already defined in its superclass. The method signature (name, parameters) in the subclass must be the same as in the superclass. The <code>@Override</code> annotation is used to ensure correctness.", code: `<span class="code-keyword">class</span> <span class="code-type">Animal</span> {\n    <span class="code-keyword">public void</span> makeSound() { System.out.println(<span class="code-string">"Generic Sound"</span>); }\n}\n<span class="code-keyword">class</span> <span class="code-type">Dog</span> <span class="code-keyword">extends</span> <span class="code-type">Animal</span> {\n    <span class="code-annotation">@Override</span>\n    <span class="code-keyword">public void</span> makeSound() { System.out.println(<span class="code-string">"Woof Woof"</span>); }\n}` },
+        { q: "Difference between an abstract class and an interface?", a: `<table><thead><tr><th>Feature</th><th>Abstract Class</th><th>Interface</th></tr></thead><tbody><tr><td><strong>Methods</strong></td><td>Can have abstract and non-abstract (concrete) methods.</td><td>Traditionally all abstract. Java 8+ allows default and static methods.</td></tr><tr><td><strong>Variables</strong></td><td>Can have final, non-final, static, and non-static variables.</td><td>Variables are implicitly <code>public static final</code> (constants).</td></tr><tr><td><strong>Inheritance</strong></td><td>A class can extend only one abstract class (single inheritance).</td><td>A class can implement multiple interfaces.</td></tr><tr><td><strong>Constructor</strong></td><td>Has constructors, which are called by subclasses during instantiation.</td><td>Does not have constructors.</td></tr><tr><td><strong>Purpose</strong></td><td>Used for a close relationship ("is-a"), providing a base for subclasses.</td><td>Used to define a contract of behavior ("can-do"), ensuring total abstraction.</td></tr></tbody></table>` },
+        { q: "Can you override a private or static method?", a: "<strong>No.</strong><br><ul><li><strong>Private methods:</strong> They are not visible to subclasses, so they cannot be overridden. If a subclass defines a method with the same signature, it's a completely new, unrelated method.</li><li><strong>Static methods:</strong> They belong to the class, not the instance. A static method with the same signature in a subclass *hides* the superclass method, but this is known as *method hiding*, not overriding. This is resolved at compile-time.</li></ul>" },
+        { q: "What is the `final` keyword?", a: "The <code>final</code> keyword is a non-access modifier used to restrict a user. It can be applied to:<br><ul><li><strong>Variable:</strong> Makes it a constant. Its value cannot be changed after initialization.</li><li><strong>Method:</strong> Prevents it from being overridden by a subclass.</li><li><strong>Class:</strong> Prevents it from being extended (inherited from).</li></ul>" },
+        { q: "Why are Strings immutable in Java?", a: "Strings are immutable for several key reasons:<br><ul><li><strong>Security:</strong> Immutable strings are safe to pass around as parameters because their value cannot be changed.</li><li><strong>String Pool:</strong> Java maintains a string pool to save memory. If strings were mutable, changing one reference would affect all other references.</li><li><strong>Thread Safety:</strong> Immutability makes String objects inherently thread-safe.</li><li><strong>Caching Hash Codes:</strong> Since the string is immutable, its hash code is cached upon creation, making lookups in <code>HashMap</code> faster.</li></ul>" },
+        { q: "Difference between String, StringBuilder, and StringBuffer?", a: `<table><thead><tr><th>Characteristic</th><th>String</th><th>StringBuilder</th><th>StringBuffer</th></tr></thead><tbody><tr><td><strong>Mutability</strong></td><td>Immutable</td><td>Mutable</td><td>Mutable</td></tr><tr><td><strong>Performance</strong></td><td>Slower for modifications.</td><td>Faster.</td><td>Slower than StringBuilder.</td></tr><tr><td><strong>Thread Safety</strong></td><td>Thread-safe.</td><td>Not thread-safe.</td><td>Thread-safe (synchronized).</td></tr><tr><td><strong>When to Use</strong></td><td>For fixed values.</td><td>In single-threaded apps.</td><td>In multi-threaded apps.</td></tr></tbody></table>` },
+        { q: "How do you create an array in Java?", a: "Arrays in Java can be created in a few ways:", code: `<span class="code-comment">// 1. Declaration and instantiation</span>\n<span class="code-type">int</span>[] intArray = <span class="code-keyword">new</span> <span class="code-type">int</span>[<span class="code-number">5</span>];\n\n<span class="code-comment">// 2. Initialization after declaration</span>\nintArray[<span class="code-number">0</span>] = <span class="code-number">10</span>;\n\n<span class="code-comment">// 3. Declaration, instantiation, and initialization together</span>\n<span class="code-type">String</span>[] fruits = {<span class="code-string">"Apple"</span>, <span class="code-string">"Banana"</span>, <span class="code-string">"Cherry"</span>};` },
+        { q: "What is an exception?", a: "An exception is an event that occurs during program execution that disrupts the normal flow of instructions. In Java, an exception is an object that is thrown at runtime and represents an error condition." },
+        { q: "Difference between checked and unchecked exceptions?", a: "<strong>Checked Exceptions:</strong> Checked at compile-time. You must handle them with <code>try-catch</code> or declare them with <code>throws</code>. E.g., <code>IOException</code>.<br><br><strong>Unchecked (Runtime) Exceptions:</strong> Not checked at compile-time. Usually indicate programming errors. E.g., <code>NullPointerException</code>." },
+        { q: "Explain `try-catch-finally`.", a: "<ul><li><strong><code>try</code>:</strong> Contains code that might throw an exception.</li><li><strong><code>catch</code>:</strong> Handles a specific exception if one is thrown in the <code>try</code> block.</li><li><strong><code>finally</code>:</strong> Guaranteed to execute regardless of an exception, used for cleanup like closing resources.</li></ul>" },
+        { q: "Difference between `throw` and `throws`?", a: "<strong>`throw` Keyword:</strong> Used to explicitly throw a single exception instance from within a method.<br>Example: <code>throw new IOException();</code><br><br><strong>`throws` Keyword:</strong> Used in a method signature to declare exceptions it might throw, delegating handling to the caller.<br>Example: <code>void readFile() throws IOException { ... }</code>" },
+        { q: "Can you create a custom exception?", a: "Yes. Create a class that extends <code>Exception</code> (for a checked exception) or <code>RuntimeException</code> (for an unchecked exception).", code: `<span class="code-keyword">class</span> <span class="code-type">InvalidAgeException</span> <span class="code-keyword">extends</span> <span class="code-type">Exception</span> {\n    <span class="code-keyword">public</span> InvalidAgeException(<span class="code-type">String</span> message) {\n        <span class="code-keyword">super</span>(message);\n    }\n}` },
+        { q: "What is the Java Collections Framework?", a: "A unified architecture for representing and manipulating groups of objects. It provides interfaces (like <code>List</code>, <code>Set</code>, <code>Map</code>) and implementations (like <code>ArrayList</code>, <code>HashSet</code>, <code>HashMap</code>)." },
+        { q: "Difference between List, Set, and Map?", a: "<ul><li><strong>List:</strong> Ordered, allows duplicates, index-based access (<code>ArrayList</code>).</li><li><strong>Set:</strong> No duplicates, order not guaranteed (<code>HashSet</code>).</li><li><strong>Map:</strong> Key-value pairs with unique keys (<code>HashMap</code>). Not a subtype of <code>Collection</code>.</li></ul>" },
+        { q: "Difference between ArrayList and LinkedList?", a: `<table><thead><tr><th>Feature</th><th>ArrayList</th><th>LinkedList</th></tr></thead><tbody><tr><td><strong>Internal Structure</strong></td><td>Dynamic array.</td><td>Doubly-linked list.</td></tr><tr><td><strong>Access (get)</strong></td><td>Fast (O(1)).</td><td>Slow (O(n)).</td></tr><tr><td><strong>Manipulation (add/remove)</strong></td><td>Slow in middle (O(n)).</td><td>Fast with iterator (O(1)).</td></tr></tbody></table>` },
+        { q: "How does a HashMap work internally?", a: "A <code>HashMap</code> uses an array of buckets. When you put a key-value pair, it computes the <code>hashCode()</code> of the key to find a bucket index. If multiple keys map to the same bucket (a collision), they are stored as a linked list or, in Java 8+, a balanced tree for better performance. It uses the <code>equals()</code> method to find the correct key within the bucket." },
+        { q: "Difference between HashMap and Hashtable?", a: "<ul><li><strong>Synchronization:</strong> <code>HashMap</code> is non-synchronized. <code>Hashtable</code> is synchronized.</li><li><strong>Nulls:</strong> <code>HashMap</code> allows one null key and multiple null values. <code>Hashtable</code> allows none.</li><li><strong>Legacy:</strong> <code>Hashtable</code> is a legacy class. Prefer <code>ConcurrentHashMap</code> for thread-safe maps.</li></ul>" },
+        { q: "What is an Iterator?", a: "An object used to traverse elements in a collection. Key methods are <code>hasNext()</code>, <code>next()</code>, and <code>remove()</code>." },
+        { q: "What are Lambda Expressions?", a: "Introduced in Java 8, a lambda is an anonymous function that treats functionality as a method argument. They are core to functional programming in Java.", code: `<span class="code-comment">// Before Java 8</span>\n<span class="code-type">Runnable</span> r1 = <span class="code-keyword">new</span> <span class="code-type">Runnable</span>() {\n    <span class="code-keyword">public void</span> run() { System.out.println(<span class="code-string">"My Runnable"</span>); }\n};\n\n<span class="code-comment">// With Lambda Expression</span>\n<span class="code-type">Runnable</span> r2 = () -> System.out.println(<span class="code-string">"My Runnable"</span>);` },
+        { q: "What is a Functional Interface?", a: "An interface with exactly one abstract method (SAM). Can be annotated with <code>@FunctionalInterface</code> to enforce this at compile time." },
+        { q: "What is the Stream API?", a: "An API for processing sequences of objects in a functional style. Streams support operations like <code>filter</code>, <code>map</code>, <code>reduce</code>, and <code>collect</code>, and can be executed sequentially or in parallel.", code: `<span class="code-type">List&lt;String&gt;</span> filtered = names.stream()\n    .filter(name -> name.startsWith(<span class="code-string">"A"</span>))\n    .collect(Collectors.toList());` },
+        { q: "What is the `Optional` class?", a: "A container object that may or may not contain a non-null value, introduced in Java 8 to help avoid <code>NullPointerException</code> and encourage explicit handling of absence." },
+        { q: "What are default methods in interfaces?", a: "Methods in an interface that have a provided implementation, allowing interface evolution without breaking implementing classes. Can be overridden." },
+        { q: "What is a thread?", a: "The smallest unit of execution within a process. Multithreading enables concurrent execution of multiple threads to improve performance." },
+        { q: "How can you create a thread in Java?", a: "1. <strong>Extend the <code>Thread</code> class</strong> and override <code>run()</code>.<br>2. <strong>Implement the <code>Runnable</code> interface</strong>, implement <code>run()</code>, and pass the instance to a new <code>Thread</code> object. The second method is preferred." },
+        { q: "Explain the life cycle of a thread.", a: "<strong>New &rarr; Runnable &rarr; Running &rarr; Blocked/Waiting &rarr; Terminated</strong><br>A thread transitions between these states based on the scheduler and its interactions with locks, I/O, and method calls like <code>sleep()</code> or <code>wait()</code>." },
+        { q: "What is synchronization?", a: "A mechanism to control access of multiple threads to a shared resource. Using the <code>synchronized</code> keyword ensures only one thread can execute a critical section at a time." },
+        { q: "Difference between `wait()` and `sleep()`?", a: `<table><thead><tr><th>Feature</th><th>wait()</th><th>sleep()</th></tr></thead><tbody><tr><td><strong>Class</strong></td><td><code>Object</code> class</td><td><code>Thread</code> class</td></tr><tr><td><strong>Lock Release</strong></td><td><strong>Releases</strong> the monitor lock.</td><td><strong>Does not release</strong> the lock.</td></tr><tr><td><strong>Context</strong></td><td>Must be in a <code>synchronized</code> block.</td><td>Can be called anywhere.</td></tr></tbody></table>` },
+        { q: "What is Garbage Collection (GC)?", a: "The process of automatic memory management where the JVM reclaims memory from objects that are no longer referenced. <code>System.gc()</code> is only a suggestion to the JVM." },
+        { q: "What is Reflection in Java?", a: "An API to inspect and modify classes, methods, and fields at runtime without compile-time knowledge of their names. Widely used by frameworks." },
+        { q: "What are Generics?", a: "Type parameters for classes and methods that provide compile-time type safety, eliminating the need for casting and allowing for reusable code.", code: `<span class="code-keyword">public class</span> <span class="code-type">Box&lt;T&gt;</span> {\n    <span class="code-keyword">private</span> T item;\n    <span class="code-keyword">public void</span> set(T item) { <span class="code-keyword">this</span>.item = item; }\n    <span class="code-keyword">public</span> T get() { <span class="code-keyword">return</span> item; }\n}` },
+        { q: "Difference between `final`, `finally`, and `finalize`?", a: "<ul><li><strong><code>final</code>:</strong> A modifier to make a variable a constant, prevent method overriding, or prevent class inheritance.</li><li><strong><code>finally</code>:</strong> A block in a <code>try-catch</code> structure that always executes.</li><li><strong><code>finalize()</code>:</strong> A method called by the GC before object collection; unreliable and deprecated.</li></ul>" },
+        { q: "Difference between an Error and an Exception?", a: "<strong>Error:</strong> Serious, unrecoverable problems an application shouldn't try to catch (e.g., <code>OutOfMemoryError</code>).<br><strong>Exception:</strong> Conditions an application may catch and handle (e.g., <code>FileNotFoundException</code>)." },
+        { q: "What are Marker Interfaces?", a: "Empty interfaces that provide metadata to the JVM or frameworks. E.g., <code>Serializable</code>, <code>Cloneable</code>." },
+        { q: "What is type casting?", a: "Converting a value from one data type to another.<br><strong>Widening (implicit):</strong> Safe, smaller type to larger type (<code>int → double</code>).<br><strong>Narrowing (explicit):</strong> Requires a cast, may lose data (<code>double → int</code>)." },
+        { q: "What is the Java Classloader?", a: "A part of the JRE that dynamically loads Java classes into the JVM at runtime from the classpath." },
+        { q: "What is a Singleton class?", a: "A design pattern that ensures a class has only one instance and provides a global access point to it, typically via a private constructor and a public static <code>getInstance()</code> method." },
+        { q: "Can a Java source file have more than one class?", a: "<strong>Yes.</strong> But it can have at most one <code>public</code> class, and the file name must match that public class name." },
+    ];
+
+    // --- Logic to create HTML elements ---
+    const qaContainer = document.getElementById('qa-container');
+
+    questionsAndAnswers.forEach((item, index) => {
+        const questionNumber = index + 1;
+
+        const container = document.createElement('section');
+        container.className = 'question-container';
+
+        // Create the content layer (which will be behind)
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'question-content';
+        const wrapperDiv = document.createElement('div');
+        wrapperDiv.className = 'content-wrapper';
+        const titleH3 = document.createElement('h3');
+        titleH3.textContent = `${questionNumber}. ${item.q}`;
+        const answerP = document.createElement('p');
+        answerP.innerHTML = item.a;
+        wrapperDiv.appendChild(titleH3);
+        wrapperDiv.appendChild(answerP);
+        if (item.code) {
+            const pre = document.createElement('pre');
+            const code = document.createElement('code');
+            code.innerHTML = item.code;
+            pre.appendChild(code);
+            wrapperDiv.appendChild(pre);
+        }
+        contentDiv.appendChild(wrapperDiv);
+
+        // Create the number layer (which will be on top)
+        const numberDiv = document.createElement('div');
+        numberDiv.className = 'question-number';
+        const numberH2 = document.createElement('h2');
+        numberH2.textContent = questionNumber;
+        numberDiv.appendChild(numberH2);
+
+        // Important: Append content first, then number, for natural layering if z-index fails
+        container.appendChild(contentDiv);
+        container.appendChild(numberDiv);
+
+        qaContainer.appendChild(container);
+    });
+
+
+    // --- Logic for scroll-based animation ---
+
+    // Collect all the elements we need to animate to avoid repeated DOM queries in the scroll handler
+    const containers = Array.from(document.querySelectorAll('.question-container')).map(container => ({
+        el: container,
+        numberH2: container.querySelector('.question-number h2'),
+        contentDiv: container.querySelector('.question-content')
+    }));
+
+    function handleScrollAnimation() {
+        const viewportHeight = window.innerHeight;
+
+        containers.forEach(container => {
+            const rect = container.el.getBoundingClientRect();
+
+            // Calculate how far the user has scrolled *into* this container
+            // 0 means the container's top is at the viewport's top
+            // A positive value means we've scrolled past the container's top
+            const scrollPos = -rect.top;
+
+            // We want the animation to occur over a specific scroll distance, e.g., 60% of the viewport height
+            const animationDistance = viewportHeight * 0.6;
+
+            if (scrollPos > 0 && scrollPos < animationDistance) {
+                // Calculate the progress of the animation (a value from 0 to 1)
+                const progress = scrollPos / animationDistance;
+
+                // Fade out the number as progress increases
+                container.numberH2.style.opacity = 1 - progress;
+
+                // Fade in the content as progress increases
+                container.contentDiv.style.opacity = progress;
+                container.contentDiv.style.transform = `scale(${0.95 + 0.05 * progress})`;
+
+            } else if (scrollPos >= animationDistance) {
+                // Once past the animation point, ensure the state is final
+                container.numberH2.style.opacity = 0;
+                container.contentDiv.style.opacity = 1;
+                container.contentDiv.style.transform = 'scale(1)';
+
+            } else {
+                // Before the animation point, ensure the state is initial
+                container.numberH2.style.opacity = 1;
+                container.contentDiv.style.opacity = 0;
+                container.contentDiv.style.transform = 'scale(0.95)';
+            }
+        });
+    }
+
+    // Use requestAnimationFrame to optimize the scroll handler for better performance
+    window.addEventListener('scroll', () => {
+        window.requestAnimationFrame(handleScrollAnimation);
+    });
+
+    // Run once on load to set the initial state correctly
+    handleScrollAnimation();
+
+</script>
+</body>
+</html>

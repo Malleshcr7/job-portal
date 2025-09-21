@@ -4,6 +4,8 @@ import com.job_portal.Lates_Jobs.controller.dto.JobPostingDto;
 import com.job_portal.Lates_Jobs.model.JobPosting;
 import com.job_portal.Lates_Jobs.repository.JobPostingRepository;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -25,18 +27,52 @@ public class JobPostingService {
         return jobPostingRepository.findById(id);
     }
 
-    public JobPosting createJob(JobPostingDto dto) {
-        JobPosting job = new JobPosting();
-        job.setJobId(UUID.randomUUID().toString()); // Generate a unique ID
-        updateJobFromDto(job, dto);
-        return jobPostingRepository.save(job);
+    public JobPosting createJob(JobPostingDto jobDto) {
+        JobPosting newJob = new JobPosting();
+        // Manually map fields from DTO to the Entity
+        newJob.setJobId(UUID.randomUUID().toString()); // Generate a unique ID for the job
+        newJob.setCompanyId(jobDto.companyId());
+        newJob.setJobTitle(jobDto.jobTitle());
+        newJob.setCompanyName(jobDto.companyName());
+        newJob.setCompanyLogo(jobDto.companyLogo());
+        newJob.setJobDescription(jobDto.jobDescription());
+        newJob.setLocation(jobDto.location());
+        newJob.setJobType(jobDto.jobType());
+        newJob.setExperienceLevel(jobDto.experienceLevel());
+        newJob.setCategory(jobDto.category());
+        newJob.setIndustry(jobDto.industry());
+        newJob.setSalary(jobDto.salary());
+        newJob.setSkills(jobDto.skills());
+        newJob.setBenefits(jobDto.benefits());
+        newJob.setApplicationUrl(jobDto.applicationUrl());
+        newJob.setPostedDate(LocalDateTime.now()); // Set the post date to now
+        newJob.setApplicationDeadline(jobDto.applicationDeadline());
+        newJob.setStatus(jobDto.status());
+
+        return jobPostingRepository.save(newJob);
     }
 
-    public Optional<JobPosting> updateJob(Long id, JobPostingDto dto) {
+    public Optional<JobPosting> updateJob(Long id, JobPostingDto jobDetailsDto) {
         return jobPostingRepository.findById(id)
-                .map(job -> {
-                    updateJobFromDto(job, dto);
-                    return jobPostingRepository.save(job);
+                .map(existingJob -> {
+                    // Map fields from DTO to the existing entity for update
+                    existingJob.setCompanyId(jobDetailsDto.companyId());
+                    existingJob.setJobTitle(jobDetailsDto.jobTitle());
+                    existingJob.setCompanyName(jobDetailsDto.companyName());
+                    existingJob.setCompanyLogo(jobDetailsDto.companyLogo());
+                    existingJob.setJobDescription(jobDetailsDto.jobDescription());
+                    existingJob.setLocation(jobDetailsDto.location());
+                    existingJob.setJobType(jobDetailsDto.jobType());
+                    existingJob.setExperienceLevel(jobDetailsDto.experienceLevel());
+                    existingJob.setCategory(jobDetailsDto.category());
+                    existingJob.setIndustry(jobDetailsDto.industry());
+                    existingJob.setSalary(jobDetailsDto.salary());
+                    existingJob.setSkills(jobDetailsDto.skills());
+                    existingJob.setBenefits(jobDetailsDto.benefits());
+                    existingJob.setApplicationUrl(jobDetailsDto.applicationUrl());
+                    existingJob.setApplicationDeadline(jobDetailsDto.applicationDeadline());
+                    existingJob.setStatus(jobDetailsDto.status());
+                    return jobPostingRepository.save(existingJob);
                 });
     }
 
@@ -47,23 +83,5 @@ public class JobPostingService {
                     return true;
                 }).orElse(false);
     }
-
-    private void updateJobFromDto(JobPosting job, JobPostingDto dto) {
-        job.setCompanyId(dto.companyId());
-        job.setJobTitle(dto.jobTitle());
-        job.setCompanyName(dto.companyName());
-        job.setCompanyLogo(dto.companyLogo());
-        job.setJobDescription(dto.jobDescription());
-        job.setLocation(dto.location());
-        job.setJobType(dto.jobType());
-        job.setExperienceLevel(dto.experienceLevel());
-        job.setCategory(dto.category());
-        job.setIndustry(dto.industry());
-        job.setSalary(dto.salary());
-        job.setSkills(dto.skills());
-        job.setBenefits(dto.benefits());
-        job.setApplicationUrl(dto.applicationUrl());
-        job.setApplicationDeadline(dto.applicationDeadline());
-        job.setStatus(dto.status());
-    }
 }
+

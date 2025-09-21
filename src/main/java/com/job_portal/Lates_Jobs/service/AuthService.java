@@ -47,20 +47,36 @@ public class AuthService {
 
     public boolean verifyOtp(String email, String otp) {
         Optional<User> userOptional = userRepository.findByEmail(email);
-        if (userOptional.isEmpty() || userOptional.get().getOtpExpiryDate().isBefore(LocalDateTime.now())) {
+
+        if (userOptional.isEmpty()) {
+            System.out.println("Verification failed: User not found with email: " + email);
             return false;
         }
 
         User user = userOptional.get();
+
+        if (user.getOtpExpiryDate().isBefore(LocalDateTime.now())) {
+            System.out.println("Verification failed: OTP has expired for user: " + email);
+            return false;
+        }
+
+        // --- ADD THIS LOGGING ---
+        System.out.println("--- OTP Verification Debug ---");
+        System.out.println("Submitted OTP: [" + otp + "]");
+        System.out.println("Database OTP:  [" + user.getOtp() + "]");
+        System.out.println("----------------------------");
+
         if (user.getOtp() != null && user.getOtp().equals(otp)) {
+            System.out.println("Verification successful for user: " + email);
             user.setEnabled(true);
             user.setOtp(null);
             user.setOtpExpiryDate(null);
             userRepository.save(user);
             return true;
+        } else {
+            System.out.println("Verification failed: OTPs do not match for user: " + email);
+            return false;
         }
-
-        return false;
     }
 
     private String generateOtp() {
@@ -69,3 +85,4 @@ public class AuthService {
         return String.format("%06d", num);
     }
 }
+

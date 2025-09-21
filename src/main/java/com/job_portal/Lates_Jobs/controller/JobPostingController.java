@@ -19,13 +19,28 @@ public class JobPostingController {
         this.jobPostingService = jobPostingService;
     }
 
-    // Anyone can get jobs
+    /**
+     * Creates a new job posting.
+     * This endpoint is protected and only accessible by users with the RECRUITER role.
+     */
+    @PostMapping
+    public JobPosting createJob(@Valid @RequestBody JobPostingDto jobDto) {
+        return jobPostingService.createJob(jobDto);
+    }
+
+    /**
+     * Retrieves all job postings.
+     * This endpoint is public and accessible by anyone.
+     */
     @GetMapping
     public List<JobPosting> getAllJobs() {
         return jobPostingService.getAllJobs();
     }
 
-    // Anyone can get a single job
+    /**
+     * Retrieves a single job posting by its ID.
+     * This endpoint is public and accessible by anyone.
+     */
     @GetMapping("/{id}")
     public ResponseEntity<JobPosting> getJobById(@PathVariable(value = "id") Long jobId) {
         return jobPostingService.getJobById(jobId)
@@ -33,22 +48,22 @@ public class JobPostingController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // Only recruiters can create jobs
-    @PostMapping
-    public JobPosting createJob(@Valid @RequestBody JobPostingDto jobDto) {
-        return jobPostingService.createJob(jobDto);
-    }
-
-    // Only recruiters can update jobs
+    /**
+     * Updates an existing job posting.
+     * This endpoint is protected and only accessible by users with the RECRUITER role.
+     */
     @PutMapping("/{id}")
     public ResponseEntity<JobPosting> updateJob(@PathVariable(value = "id") Long jobId,
-                                                @Valid @RequestBody JobPostingDto jobDetails) {
-        return jobPostingService.updateJob(jobId, jobDetails)
+                                                @Valid @RequestBody JobPostingDto jobDetailsDto) {
+        return jobPostingService.updateJob(jobId, jobDetailsDto)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // Only recruiters can delete jobs
+    /**
+     * Deletes a job posting.
+     * This endpoint is protected and only accessible by users with the RECRUITER role.
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteJob(@PathVariable(value = "id") Long jobId) {
         if (jobPostingService.deleteJob(jobId)) {
@@ -57,3 +72,4 @@ public class JobPostingController {
         return ResponseEntity.notFound().build();
     }
 }
+

@@ -20,6 +20,8 @@ public class JobPosting {
     private String companyId;
 
     @NotEmpty
+    // --- FINAL FIX: Map to the 'job_title' column ---
+    @Column(name = "job_title")
     private String jobTitle;
 
     @NotEmpty
@@ -28,8 +30,8 @@ public class JobPosting {
     @Column(nullable = true)
     private String companyLogo;
 
-    @Lob // For large text fields
-    @Column(nullable = false)
+    @Lob
+    @Column(name = "job_description", nullable = false)
     private String jobDescription;
 
     @Embedded
