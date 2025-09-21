@@ -16,12 +16,10 @@ pipeline {
         }
 
         stage('Build') {
-            steps {
-                sh './mvnw clean package'  // Uses Maven Wrapper (recommended)
-                // OR if you prefer global Maven:
-                // sh 'mvn clean package'
-            }
-        }
+    steps {
+        bat '.\\mvnw.cmd clean package'  // ← Use 'bat' and backslashes on Windows!
+    }
+}
 
         stage('Test') {
             steps {
