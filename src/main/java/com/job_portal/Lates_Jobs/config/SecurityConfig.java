@@ -31,12 +31,27 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+                        // --- START OF CHANGES ---
+                        // Permit all public-facing web pages and static resources
+                        .requestMatchers(
+                                "/",
+                                "/login",
+                                "/register",
+                                "/web/jobs/**",
+                                "/css/**",
+                                "/favicon.ico"
+                        ).permitAll()
+                        // Permit all public API endpoints
                         .requestMatchers("/api/auth/**").permitAll()
-                        // This is the line that fixes the issue
                         .requestMatchers(HttpMethod.GET, "/api/jobs/**").permitAll()
+                        // --- END OF CHANGES ---
+
+                        // Secure endpoints for RECRUITER role
                         .requestMatchers(HttpMethod.POST, "/api/jobs").hasAuthority("ROLE_RECRUITER")
                         .requestMatchers(HttpMethod.PUT, "/api/jobs/**").hasAuthority("ROLE_RECRUITER")
                         .requestMatchers(HttpMethod.DELETE, "/api/jobs/**").hasAuthority("ROLE_RECRUITER")
+
+                        // All other requests must be authenticated
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
@@ -58,3 +73,4 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 }
+

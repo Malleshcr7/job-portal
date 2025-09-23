@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Register - Lates-Jobs</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<header class="navbar">
+    <div class="container">
+        <a th:href="@{/}" class="logo">Lates-Jobs</a>
+        <nav>
+            <a th:href="@{/login}" class="btn btn-secondary">Login</a>
+        </nav>
+    </div>
+</header>
+
+<main class="container">
+    <div class="form-container">
+        <h2>Create a New Account</h2>
+        <!-- Note: The form action should point to your backend registration endpoint -->
+        <form th:action="@{/api/auth/register}" method="post">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" minlength="8" required>
+            </div>
+            <div class="form-group">
+                <label>Register as:</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="role" value="USER" checked> Job Seeker</label>
+                    <label><input type="radio" name="role" value="RECRUITER"> Recruiter</label>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary full-width">Create Account</button>
+        </form>
+        <p class="form-switch">Already have an account? <a th:href="@{/login}">Login here</a>.</p>
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="container">
+        <p>&copy; 2025 Lates-Jobs. All Rights Reserved.</p>
+    </div>
+</footer>
+
+</body>
+</html>

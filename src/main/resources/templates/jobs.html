@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Latest Jobs</title>
+</head>
+<body>
+<h1>Job Listings</h1>
+<div th:each="job : ${jobs}">
+    <h2 th:text="${job.jobTitle}">Job Title</h2>
+    <p th:text="${job.companyName}">Company Name</p>
+    <a th:href="@{/web/jobs/{id}(id=${job.id})}">View Details</a>
+    <hr/>
+</div>
+</body>
+</html>

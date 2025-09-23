@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Page Not Found - Lates-Jobs</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<header class="navbar">
+    <div class="container">
+        <a th:href="@{/}" class="logo">Lates-Jobs</a>
+    </div>
+</header>
+
+<main class="container centered-content">
+    <div class="error-page">
+        <div class="error-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="90" height="90" fill="currentColor" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+                <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+            </svg>
+        </div>
+        <h1>404 - Page Not Found</h1>
+        <p>Oops! The page you are looking for does not exist or has been moved.</p>
+        <a th:href="@{/web/jobs}" class="btn btn-primary">Go to Job Listings</a>
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="container">
+        <p>&copy; 2025 Lates-Jobs. All Rights Reserved. India.</p>
+    </div>
+</footer>
+
+</body>
+</html>
+
